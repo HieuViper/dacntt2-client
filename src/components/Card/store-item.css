@@ -1,0 +1,29 @@
+.box {
+  /* background: 
+  linear-gradient(105deg, #000 52%, transparent 52.5%), 
+  url(https://picsum.photos/400/300?random); */
+  display: inline-block;
+  position: relative;
+}
+.right {
+  right: 0;
+  top: 0;
+  position: absolute;
+}
+.left {
+  left: 0;
+  top: 0;
+  position: absolute;
+}
+
+img.img-left {
+  display: block;
+  -webkit-clip-path: polygon(0 0, 40% 0, 60% 100%, 0 100%);
+  clip-path: polygon(0 0, 40% 0, 60% 100%, 0 100%);
+}
+
+img.img-right {
+  display: block;
+  -webkit-clip-path: polygon(70% 0, 100% 0, 100% 100%, 40% 100%);
+  clip-path: polygon(70% 0, 100% 0, 100% 100%, 40% 100%);
+}
