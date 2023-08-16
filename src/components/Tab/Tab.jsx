@@ -3,12 +3,12 @@ import { Tabs, Tab, ThemeProvider, Box } from "@mui/material";
 
 import React from "react";
 import theme from "../../utils/theme";
+import { callNon } from "../../utils/api";
 
-const TabComponent = ({ data, dispatch }) => {
+const TabComponent = ({ data, dispatch, setSelectedFoodGroup }) => {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {
-    console.log(newValue);
     setValue(newValue);
   };
   return (
@@ -32,7 +32,17 @@ const TabComponent = ({ data, dispatch }) => {
               style={{ fontFamily: "Poppins" }}
               label={item.name}
               onClick={() => {
-                dispatch({ type: "filterFoodGroup", item: item });
+                console.log("okok");
+                setSelectedFoodGroup(item);
+                callNon(
+                  `api/stores/${item.store_id}/food_groups/${item.id}/food`
+                ).then((res) => {
+                  dispatch({ type: "setList", payload: { list: res.data } });
+                  dispatch({
+                    type: "getTotal",
+                    payload: { total: res.paging.last_page },
+                  });
+                });
               }}
             />
           ))}

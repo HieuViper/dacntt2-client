@@ -23,17 +23,16 @@ const updateFood = (item, state) => {
   temp[index] = item;
   return { ...state, list: temp };
 };
-const filterFoodGroup = async (item, state) => {
+const filterFoodGroup = (item, state) => {
   console.log(item);
   let temp = [...state.list];
   console.log("🚀 ~ file: FoodContext.jsx:29 ~ filterFoodGroup ~ temp:", temp);
-  const rs = await callNon(
+  callNon(
     `api/stores/${item.store_id}/food_groups/${item.id}/food?page_size=100&page=1`
-  );
-  console.log("🚀 ~ file: FoodContext.jsx:32 ~ filterFoodGroup ~ rs:", rs);
-  temp = rs.data;
-  console.log(temp);
-  return state;
+  ).then((res) => {
+    temp = res.data;
+    return { ...state, list: temp };
+  });
 
   // console.log(temp);
 };
@@ -86,11 +85,12 @@ function FoodProvider({ children }) {
     );
 
     dispatch({ type: "setList", payload: { list: result.data } });
-    dispatch({ type: "getTotal", payload: { total: result.total } });
+    dispatch({ type: "getTotal", payload: { total: result.paging.last_page } });
     setIsLoading(false);
   }
   async function getListFoodFromStore(data) {
-    dispatch({ type: "setList", payload: { list: data } });
+    dispatch({ type: "setList", payload: { list: data.data } });
+    dispatch({ type: "getTotal", payload: { total: data.paging.last_page } });
     setIsLoading(false);
   }
   return (

@@ -16,6 +16,16 @@ const addItem = (item, state) => {
   temp.unshift(item);
   return { ...state, list: temp };
 };
+const addStoreID = (item, state) => {
+  return { ...state, storeID: item };
+};
+const addVoucherID = (item, state) => {
+  return { ...state, voucherID: item };
+};
+const clearCart = (state) => {
+  const temp = [];
+  return { ...state, list: temp };
+};
 const updateItem = (item, state) => {
   const temp = [...state.list];
   const index = temp.findIndex((obj) => obj.id === item.id);
@@ -63,6 +73,12 @@ const reducer = (state, action) => {
       return increaseItem(action.sid, state);
     case "decreaseItem":
       return decreaseItem(action.sid, state);
+    case "addStoreID":
+      return addStoreID(action.item, state);
+    case "addVoucherID":
+      return addVoucherID(action.item, state);
+    case "clearCart":
+      return clearCart(state);
     default:
       return { ...state };
   }

@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import {
+  CircularProgress,
   FormControl,
   FormHelperText,
   IconButton,
@@ -16,10 +17,15 @@ import {
 import { useFormik } from "formik";
 import RegisterValidationSchema from "../validations/RegisterValidation";
 import { callNon } from "../utils/api";
+import { toast } from "react-toastify";
+import { useEffect } from "react";
+import { AsyncStorage } from "AsyncStorage";
 
 const RegisterPage = () => {
   const [togglePassword, setTooglePassword] = useState(false);
   const [toggleConfirmPw, setToogleConfirmPw] = useState(false);
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const formik = useFormik({
     initialValues: {
@@ -32,35 +38,42 @@ const RegisterPage = () => {
     },
     validationSchema: RegisterValidationSchema,
     onSubmit: (values) => {
+      setLoading(true);
       console.log(values);
-      const rs = callNon(`api/customers`, "POST", values);
-      console.log("🚀 ~ file: RegisterPage.jsx:38 ~ RegisterPage ~ rs:", rs);
+      callNon(`api/register`, "POST", values).then((res) => {
+        if (res) setLoading(false);
+        if (res.status == 200) {
+          toast.success("Resgister Successfully", { autoClose: 2000 });
+          navigate("/login");
+        } else {
+          if (res.data.errors) {
+            for (var key in res.data.errors) {
+              var value = res.data.errors[key][0];
+              console.log(value);
+              toast.error(value, { autoClose: 2000 });
+            }
+          } else {
+            toast.error(res.data.message, { autoClose: 2000 });
+          }
+        }
+      });
     },
   });
 
-  // const TextField = styled(TextField)({
-  //   "& label.Mui-focused": {
-  //     color: "#A0AAB4",
-  //   },
-  //   "& .MuiInput-underline:after": {
-  //     borderBottomColor: "#B2BAC2",
-  //   },
-  //   "& .MuiOutlinedInput-root": {
-  //     "& fieldset": {
-  //       borderColor: "#E0E3E7",
-  //     },
-  //     "&:hover fieldset": {
-  //       borderColor: "#B2BAC2",
-  //     },
-  //     "&.Mui-focused fieldset": {
-  //       borderColor: "#6F7E8C",
-  //     },
-  //   },
-  // });
+  useEffect(() => {
+    const checkToken = async () => {
+      const token = await AsyncStorage.getItem("token-customer");
+      console.log("🚀 ~ file: LoginPage.jsx:56 ~ useEffect ~ token:", token);
+      if (token) {
+        navigate("/");
+      }
+    };
+    checkToken();
+  }, []);
 
   return (
     <form onSubmit={formik.handleSubmit}>
-      <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto no-scrollbar bg-[url('https://images.unsplash.com/photo-1522784081430-8ac6a122cbc8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80')] bg-no-repeat bg-cover">
+      <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto no-scrollbar h-full w-full bg-[url('https://images.unsplash.com/photo-1522784081430-8ac6a122cbc8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80')] bg-no-repeat bg-cover">
         <a
           href="#"
           className="flex items-center mb-6 text-3xl font-semibold text-white"
@@ -69,7 +82,7 @@ const RegisterPage = () => {
         </a>
         <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-            <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white mb-2">
+            <h1 className="text-xl text-center font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white mb-2">
               Sign up your account
             </h1>
             <div className="space-y-4 md:space-y-6" action="#">
@@ -229,7 +242,11 @@ const RegisterPage = () => {
                 type="submit"
                 className="w-full text-white bg-primary-600 hover:bg-primary-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
               >
-                Sign Up
+                {loading ? (
+                  <CircularProgress style={{ color: "white" }} size="1.25rem" />
+                ) : (
+                  "Sign Up"
+                )}
               </button>
               <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                 Already have an account?{" "}

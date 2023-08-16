@@ -1,15 +1,21 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import { CartContext } from "../../stores/CartContext";
+import { authContext } from "../../utils/auth";
+import { Link } from "react-router-dom";
 
 // eslint-disable-next-line react/prop-types
 const Header = ({ setCartOpen }) => {
   const { state, dispatch } = useContext(CartContext);
+  // const [userInfo, setUserInfo] = useState();
+  const userInfo = useContext(authContext);
+  // console.log("🚀 ~ file: Header.jsx:11 ~ Header ~ userInfo:", userInfo);
+
   return (
     <div className="w-full flex items-center gap-5 px-2">
-      <div className="flex-1 text-2xl font-semibold text-white text-start">
+      <div className="flex-1 lg:text-2xl sm:text-lg text-base font-semibold text-white text-start">
         Food Order Website
-        <div className="text-base font-light">
+        <div className="text-sm font-light sm:block hidden">
           {new Date().toLocaleString("en-us", {
             month: "short",
             weekday: "short",
@@ -19,10 +25,25 @@ const Header = ({ setCartOpen }) => {
         </div>
       </div>
 
-      <label htmlFor="simple-search" className="sr-only">
+      {userInfo ? (
+        <span>
+          Welcome, <b> {userInfo.name}</b>
+        </span>
+      ) : (
+        <>
+          <button className="px-4 py-2 rounded-full bg-dark-800 text-primary-600 hover:bg-primary-600 hover:text-white duration-200">
+            <Link to="/register">Sign Up</Link>
+          </button>
+          <button className="px-4 py-2 rounded-full bg-dark-800 text-primary-600 hover:bg-primary-600 hover:text-white duration-200">
+            <Link to="/login">Sign In</Link>
+          </button>
+        </>
+      )}
+
+      <label htmlFor="simple-search" className="sr-only ">
         Search
       </label>
-      <div className="relative">
+      <div className="relative sm:block hidden">
         <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
           <svg
             aria-hidden="true"

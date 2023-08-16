@@ -11,17 +11,23 @@ import Payment from "../components/Payment/Payment";
 const DeafaultLayout = () => {
   const { state, dispatch } = useContext(CartContext);
   const [toogleSidebar, setToogleSidebar] = useState(true);
+  const [openPayment, setOpenPayment] = useState(false);
+
   console.log(
     "🚀 ~ file: DeafaultLayout.jsx:12 ~ DeafaultLayout ~ state:",
     state
   );
   const [cartOpen, setCartOpen] = useState(false);
+  console.log(
+    "🚀 ~ file: DeafaultLayout.jsx:21 ~ DeafaultLayout ~ cartOpen:",
+    cartOpen
+  );
   return (
     <div className="w-full h-screen bg-dark-700 object-cover flex items-center gap-5 text-white overflow-y-scroll">
       <div className="fixed top-0 w-full z-50 p-5 shadow-[0_35px_60px_-15px_rgba(0,0,0,0.3)] bg-gradient-to-r from-primary-600 to-slate-900">
         <Header setCartOpen={setCartOpen} />
       </div>
-      <div className="flex h-full w-full pt-5 mt-48 gap-7">
+      <div className="flex h-full w-full pt-5 pr-4 sm:mt-48 mt-52 gap-5">
         <Drawer
           open={cartOpen}
           onClose={() => setCartOpen(false)}
@@ -29,19 +35,30 @@ const DeafaultLayout = () => {
           PaperProps={{
             style: {
               maxWidth: "70%",
-              backgroundColor: "transparent",
+              backgroundColor: "#1F1D2B",
             },
           }}
         >
           <CartProvider>
             <div className="flex h-full">
-              <Cart
-                setCartOpen={setCartOpen}
-                state={state}
-                dispatch={dispatch}
-              />
+              <div className={`${openPayment ? "sm:block hidden" : ""}`}>
+                <Cart
+                  setCartOpen={setCartOpen}
+                  state={state}
+                  dispatch={dispatch}
+                  setOpenPayment={setOpenPayment}
+                  openPayment={openPayment}
+                />
+              </div>
               <div className="h-full w-[1px] bg-[#393C49]"></div>
-              <Payment />
+              {openPayment && (
+                <Payment
+                  setOpenPayment={setOpenPayment}
+                  setCartOpen={setCartOpen}
+                  cartData={state}
+                  dispatchCart={dispatch}
+                />
+              )}
             </div>
           </CartProvider>
         </Drawer>

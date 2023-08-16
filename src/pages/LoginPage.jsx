@@ -19,6 +19,7 @@ import { FiEye, FiEyeOff } from "react-icons/fi";
 import { callNon } from "../utils/api";
 import { toast } from "react-toastify";
 import { AsyncStorage } from "AsyncStorage";
+import { useEffect } from "react";
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -34,14 +35,14 @@ const LoginPage = () => {
       const res = callNon(`api/login`, "POST", {
         email: values.email,
         password: values.password,
-        type: "admin",
+        type: "customer",
       }).then((res) => {
         console.log(res);
         if (res) setLoading(false);
         if (res.status == 200) {
           AsyncStorage.setItem("token-customer", JSON.stringify(res));
           toast.success(res.message, { autoClose: 2000 });
-          navigate("/");
+          window.location.href = "/menu";
         } else {
           toast.error(res.data.message);
         }
@@ -50,25 +51,16 @@ const LoginPage = () => {
     },
   });
 
-  // const CssTextField = styled(TextField)({
-  //   "& label.Mui-focused": {
-  //     color: "#A0AAB4",
-  //   },
-  //   "& .MuiInput-underline:after": {
-  //     borderBottomColor: "#B2BAC2",
-  //   },
-  //   "& .MuiOutlinedInput-root": {
-  //     "& fieldset": {
-  //       borderColor: "#E0E3E7",
-  //     },
-  //     "&:hover fieldset": {
-  //       borderColor: "#B2BAC2",
-  //     },
-  //     "&.Mui-focused fieldset": {
-  //       borderColor: "#6F7E8C",
-  //     },
-  //   },
-  // });
+  useEffect(() => {
+    const checkToken = async () => {
+      const token = await AsyncStorage.getItem("token-customer");
+      console.log("🚀 ~ file: LoginPage.jsx:56 ~ useEffect ~ token:", token);
+      if (token) {
+        navigate("/");
+      }
+    };
+    checkToken();
+  }, []);
 
   return (
     <form onSubmit={formik.handleSubmit}>

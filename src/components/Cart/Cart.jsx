@@ -3,25 +3,60 @@ import React, { useContext, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { CartContext } from "../../stores/CartContext";
 import cartEmpty from "../../assets/cartEmpty.svg";
+import { call } from "../../utils/api";
+import { toast } from "react-toastify";
 
 // eslint-disable-next-line react/prop-types
-const Cart = ({ setCartOpen, state, dispatch }) => {
-  console.log("🚀 ~ file: Cart.jsx:8 ~ Cart ~ state:", state);
+const Cart = ({
+  setCartOpen,
+  state,
+  dispatch,
+  setOpenPayment,
+  openPayment,
+}) => {
   const [total, setTotal] = useState();
-  const [openPayment, setOpenPayment] = useState(false);
+  console.log("🚀 ~ file: Cart.jsx:18 ~ total:", total);
+  const [coupon, setCoupon] = useState();
+  const [discountPercent, setDiscountPercent] = useState();
+
+  const handleContinue = async () => {
+    if (coupon) {
+      const rs = await call(`api/get-voucher-by-code/${coupon}`);
+      // .then((rs) => {
+      console.log("🚀 ~ file: Cart.jsx:24 ~ handleContinue ~ rs:", rs);
+      if (rs.status == 200) {
+        dispatch({ type: "addVoucherID", item: rs.data.id });
+        toast.success(
+          `Apply Voucher Successfully!!! Your Order has been discount ${rs.data.discount}%`
+        );
+        setDiscountPercent(rs.data.discount);
+        setOpenPayment(true);
+      } else {
+        toast.error(`${rs.data.message}`);
+      }
+    } else {
+      setOpenPayment(true);
+    }
+  };
   useEffect(() => {
-    setTotal(
-      state.list.reduce((price, object) => {
-        return price + object.price * object.quantity;
-      }, 0)
-    );
+    if (discountPercent) {
+      setTotal(total - (total * discountPercent) / 100);
+    } else {
+      setTotal(
+        state.list.reduce((price, object) => {
+          if (object.discount > 0)
+            return price + object.discounted_price * object.quantity;
+          else return price + object.price * object.quantity;
+        }, 0)
+      );
+    }
   }, [state]);
   return (
-    <div className="bg-dark-800 w-[600px] h-full text-white rounded-lg p-6 flex flex-col overflow-y-scroll">
+    <div className="bg-dark-800 w-full h-screen text-white rounded-lg p-6 flex flex-col overflow-y-scroll">
       <div className="text-2xl font-semibold flex items-center justify-between">
         <span>Cart Order</span>
         <motion.button
-          className="p-4 bg-primary-600 text-center rounded-lg"
+          className="p-3 bg-primary-600 text-center rounded-lg"
           whileTap={{ scale: 1.1 }}
           onClick={() => setCartOpen(false)}
         >
@@ -53,10 +88,10 @@ const Cart = ({ setCartOpen, state, dispatch }) => {
           state.list.map((item) => (
             <div
               key={item.id}
-              className="list py-2 my-2 overflow-y-scroll no-scrollbar gap-6 flex flex-col"
+              className="list py-2 my-2 overflow-y-scroll no-scrollbar"
             >
-              <div className="item flex justify-between gap-5">
-                <div className="flex flex-col items-center gap-3 flex-1">
+              <div className="item flex justify-between gap-2">
+                <div className="flex flex-col items-center gap-3 basis-10/12">
                   <div className="flex items-center gap-2 w-full">
                     <img
                       src={item.avatar}
@@ -64,16 +99,29 @@ const Cart = ({ setCartOpen, state, dispatch }) => {
                       alt=""
                     />
                     <div className="flex flex-col flex-1">
-                      <span className="text-sm truncate w-40">{item.name}</span>
-                      <span className="text-sm text-[#ABBBC2]">
-                        {item.price.toLocaleString()}₫
+                      <span className="text-sm truncate sm:w-40 w-16">
+                        {item.name}
                       </span>
+                      {item.discount > 0 ? (
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs text-[#64686a] line-through">
+                            {item.price.toLocaleString()}₫
+                          </span>
+                          <span className="text-sm text-[#ABBBC2]">
+                            {item.discounted_price.toLocaleString()}₫
+                          </span>
+                        </div>
+                      ) : (
+                        <span className="text-sm text-[#ABBBC2]">
+                          {item.price.toLocaleString()}₫
+                        </span>
+                      )}
                     </div>
                     {item.quantity <= 1 ? (
                       <></>
                     ) : (
                       <button
-                        className="rounded-lg py-4 px-2 bg-dark-700"
+                        className="rounded-lg sm:py-4 py-2 sm:px-2 px-1 bg-dark-700"
                         onClick={() =>
                           dispatch({ type: "decreaseItem", sid: item.id })
                         }
@@ -81,11 +129,11 @@ const Cart = ({ setCartOpen, state, dispatch }) => {
                         -
                       </button>
                     )}
-                    <div className="rounded-lg p-4 bg-dark-700">
+                    <div className="rounded-lg sm:p-4 p-2 bg-dark-700">
                       {item.quantity}
                     </div>
                     <button
-                      className="rounded-lg py-4 px-2 bg-dark-700"
+                      className="rounded-lg sm:py-4 py-2 sm:px-2 px-1 bg-dark-700"
                       onClick={() => {
                         dispatch({ type: "increaseItem", sid: item.id });
                       }}
@@ -99,10 +147,17 @@ const Cart = ({ setCartOpen, state, dispatch }) => {
                     placeholder="Notice..."
                   />
                 </div>
-                <div className="flex flex-col items-center justify-between gap-2">
-                  <div className="">
-                    {(item.price * item.quantity).toLocaleString()}₫
-                  </div>
+                <div className="flex flex-col items-end justify-between gap-2 basis-2/12">
+                  {item.discount > 0 ? (
+                    <div className="">
+                      {(item.discounted_price * item.quantity).toLocaleString()}
+                      ₫
+                    </div>
+                  ) : (
+                    <div className="">
+                      {(item.price * item.quantity).toLocaleString()}₫
+                    </div>
+                  )}
                   <motion.button
                     whileTap={{ scale: 1.2 }}
                     className="p-3  text-center rounded-lg border-[1px] border-primary-600 hover:bg-primary-600 group transition-all duration-200"
@@ -138,15 +193,35 @@ const Cart = ({ setCartOpen, state, dispatch }) => {
       </div>
 
       {state.list.length > 0 ? (
-        <div className="footer">
-          <div className="flex justify-between">
-            <span>Discount</span>
-            <span>0</span>
+        <div className="footer flex flex-col gap-2">
+          <div className=" flex items-center gap-3">
+            <span>Coupon</span>
+            <input
+              type="text"
+              className="text-xs outline-none px-4 py-2 rounded-lg bg-dark-700 w-full"
+              name=""
+              placeholder="Enter Coupon (Not required)"
+              onChange={(e) => setCoupon(e.target.value)}
+              id=""
+            />
           </div>
+          {discountPercent && (
+            <span className="text-xs">
+              Congrats! Your order gets {discountPercent}% off.
+            </span>
+          )}
           <div className="flex justify-between">
             <span>Total</span>
-            <span>{total?.toLocaleString()}₫</span>
+            <span className="font-semibold">{total?.toLocaleString()}₫</span>
           </div>
+          {!openPayment && (
+            <button
+              className="p-3 bg-primary-600 text-white rounded-lg"
+              onClick={handleContinue}
+            >
+              Continue Payment
+            </button>
+          )}
         </div>
       ) : (
         <></>

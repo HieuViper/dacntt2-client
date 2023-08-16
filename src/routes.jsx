@@ -9,6 +9,10 @@ import { FoodProvider } from "./stores/FoodContext";
 import MenuPage from "./pages/MenuPage";
 import StorePage from "./pages/StorePage";
 import DetailFoodPage from "./pages/DetailFoodPage";
+import Auth from "./utils/auth";
+import ProfilePage from "./pages/ProfilePage";
+import AboutPage from "./pages/AboutPage";
+import RecommendPage from "./pages/RecommendPage";
 
 const Router = () => {
   const routes = useRoutes([
@@ -22,11 +26,7 @@ const Router = () => {
         },
         {
           path: "/menu",
-          element: (
-            <FoodProvider>
-              <MenuPage />
-            </FoodProvider>
-          ),
+          element: <MenuPage />,
         },
         {
           path: "/food/:id",
@@ -36,11 +36,23 @@ const Router = () => {
           path: "/stores",
           element: <StorePage />,
         },
+        {
+          path: "/profile",
+          element: <ProfilePage />,
+        },
+        {
+          path: "/recommend",
+          element: <RecommendPage />,
+        },
       ],
     },
     {
       path: "/home",
       element: <HomePage />,
+    },
+    {
+      path: "/about",
+      element: <AboutPage />,
     },
     {
       path: "/login",

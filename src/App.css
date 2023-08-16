@@ -7,18 +7,23 @@
 
 /* Chrome, Edge, and Safari */
 *::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 
 *::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0);
+  background: #1f1d2b;
+}
+*::-webkit-scrollbar:horizontal {
+  height: 0;
+  width: 0;
+  display: none;
 }
 body {
   overflow: overlay;
 }
 
 *::-webkit-scrollbar-thumb {
-  background-color: #1f1d2b;
+  background-color: #ea736d;
   border-radius: 10px;
 }
 

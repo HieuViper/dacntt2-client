@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import { datas } from "./Data";
 import { FiLogOut } from "react-icons/fi";
 import { AsyncStorage } from "AsyncStorage";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Tooltip, tooltipClasses } from "@mui/material";
 import styled from "@emotion/styled";
+import { authContext } from "../../utils/auth";
 
 const CustomTooltip = styled(({ className, ...props }) => (
   <Tooltip {...props} classes={{ popper: className }} />
@@ -24,20 +25,20 @@ const CustomTooltip = styled(({ className, ...props }) => (
 // eslint-disable-next-line react/prop-types
 const SideBarData = ({ toggle }) => {
   const location = useLocation();
-  console.log(
-    "🚀 ~ file: SideBarData.jsx:10 ~ SideBarData ~ location:",
-    location
-  );
+  const userInfo = useContext(authContext);
   const navigate = useNavigate();
   const handleLogout = () => {
-    AsyncStorage.setItem("token-admin", null);
+    AsyncStorage.setItem("token-customer", "");
     navigate("/login");
   };
   return (
     <div className="">
       {datas.map((data) => {
         return (
-          <>
+          <div
+            className={`${toggle ? "sm:block hidden" : "block"}`}
+            key={data.id}
+          >
             <Link to={data.href}>
               <CustomTooltip
                 title={toggle ? data.text : ""}
@@ -46,7 +47,7 @@ const SideBarData = ({ toggle }) => {
               >
                 <div
                   className={`${
-                    toggle ? "last:w-[3.6rem]" : "last:w-[14rem]"
+                    toggle ? "last:w-[3.6rem]" : "last:w-[16rem]"
                   } sidebar `}
                   key={data.id}
                 >
@@ -64,30 +65,32 @@ const SideBarData = ({ toggle }) => {
               </CustomTooltip>
             </Link>
 
-            <CustomTooltip
-              title={toggle ? "Logout" : ""}
-              arrow
-              placement="right"
-            >
-              <div
-                className={`absolute bottom-4 left-4 z-10 cursor-pointer  sidebar ${
-                  toggle ? "w-[69%]" : "w-[87%]"
-                }`}
-                onClick={handleLogout}
+            {userInfo && (
+              <CustomTooltip
+                title={toggle ? "Logout" : ""}
+                arrow
+                placement="right"
               >
-                <div className="mr-8 text-[1.7rem] text-[rgb(30, 30, 17)]">
-                  <FiLogOut />
-                </div>
                 <div
-                  className={`${
-                    toggle ? "opacity-0 delay-200" : ""
-                  } text-[1rem] text-[rgb(30, 30, 17)] whitespace-pre`}
+                  className={`absolute bottom-4 left-4 z-10 cursor-pointer  sidebar ${
+                    toggle ? "w-[62%]" : "w-[87%]"
+                  }`}
+                  onClick={handleLogout}
                 >
-                  Logout
+                  <div className="mr-8 text-[1.7rem] text-[rgb(30, 30, 17)]">
+                    <FiLogOut />
+                  </div>
+                  <div
+                    className={`${
+                      toggle ? "opacity-0 delay-200" : ""
+                    } text-[1rem] text-[rgb(30, 30, 17)] whitespace-pre`}
+                  >
+                    Logout
+                  </div>
                 </div>
-              </div>
-            </CustomTooltip>
-          </>
+              </CustomTooltip>
+            )}
+          </div>
         );
       })}
     </div>
