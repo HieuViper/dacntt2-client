@@ -67,8 +67,8 @@ const HomePage = () => {
       </div>
 
       <div className="section-2 md:px-20 px-10 py-12 ">
-        <div className="flex flex-col gap-3 mb-7 text-center">
-          <div className="font-bold text-2xl">Our Featured Food</div>
+        <div className="flex flex-col gap-3 mb-10 text-center">
+          <div className="font-bold text-3xl">Our Featured Food</div>
           <div className="text-sm">
             Lorem ipsum dolor sit amet consectetur adipisicing elit.
             Reprehenderit vel sequi, voluptate porro modi
@@ -119,8 +119,8 @@ const HomePage = () => {
       </div>
 
       <div className="section-3 md:px-20 px-10 py-10 bg-zinc-800 text-white">
-        <div className="flex flex-col gap-5 mb-7 text-center">
-          <div className="font-bold text-2xl">Our Stores</div>
+        <div className="flex flex-col gap-5 mb-10 text-center">
+          <div className="font-bold text-3xl">Our Stores</div>
           <div className="text-sm">
             Lorem ipsum dolor sit amet consectetur adipisicing elit.
             Reprehenderit vel sequi, voluptate porro modi

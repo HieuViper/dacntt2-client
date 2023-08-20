@@ -13,6 +13,7 @@ import Auth from "./utils/auth";
 import ProfilePage from "./pages/ProfilePage";
 import AboutPage from "./pages/AboutPage";
 import RecommendPage from "./pages/RecommendPage";
+import SuccessPage from "./pages/SuccessPage";
 
 const Router = () => {
   const routes = useRoutes([
@@ -45,6 +46,10 @@ const Router = () => {
           element: <RecommendPage />,
         },
       ],
+    },
+    {
+      path: "/payment-success",
+      element: <SuccessPage />,
     },
     {
       path: "/home",

@@ -5,6 +5,8 @@ import { CartContext } from "../../stores/CartContext";
 import cartEmpty from "../../assets/cartEmpty.svg";
 import { call } from "../../utils/api";
 import { toast } from "react-toastify";
+import { AsyncStorage } from "AsyncStorage";
+import { useNavigate } from "react-router-dom";
 
 // eslint-disable-next-line react/prop-types
 const Cart = ({
@@ -18,24 +20,30 @@ const Cart = ({
   console.log("🚀 ~ file: Cart.jsx:18 ~ total:", total);
   const [coupon, setCoupon] = useState();
   const [discountPercent, setDiscountPercent] = useState();
+  const navigate = useNavigate();
 
   const handleContinue = async () => {
-    if (coupon) {
-      const rs = await call(`api/get-voucher-by-code/${coupon}`);
-      // .then((rs) => {
-      console.log("🚀 ~ file: Cart.jsx:24 ~ handleContinue ~ rs:", rs);
-      if (rs.status == 200) {
-        dispatch({ type: "addVoucherID", item: rs.data.id });
-        toast.success(
-          `Apply Voucher Successfully!!! Your Order has been discount ${rs.data.discount}%`
-        );
-        setDiscountPercent(rs.data.discount);
-        setOpenPayment(true);
-      } else {
-        toast.error(`${rs.data.message}`);
-      }
+    const token = await AsyncStorage.getItem("token-customer");
+    if (!token) {
+      navigate("/login");
     } else {
-      setOpenPayment(true);
+      if (coupon) {
+        const rs = await call(`api/get-voucher-by-code/${coupon}`);
+        // .then((rs) => {
+        console.log("🚀 ~ file: Cart.jsx:24 ~ handleContinue ~ rs:", rs);
+        if (rs.status == 200) {
+          dispatch({ type: "addVoucherID", item: rs.data.id });
+          toast.success(
+            `Apply Voucher Successfully!!! Your Order has been discount ${rs.data.discount}%`
+          );
+          setDiscountPercent(rs.data.discount);
+          setOpenPayment(true);
+        } else {
+          toast.error(`${rs.data.message}`);
+        }
+      } else {
+        setOpenPayment(true);
+      }
     }
   };
   useEffect(() => {
@@ -99,7 +107,7 @@ const Cart = ({
                       alt=""
                     />
                     <div className="flex flex-col flex-1">
-                      <span className="text-sm truncate sm:w-40 w-16">
+                      <span className="text-sm truncate sm:w-20 md:w-32 w-16">
                         {item.name}
                       </span>
                       {item.discount > 0 ? (
@@ -121,7 +129,9 @@ const Cart = ({
                       <></>
                     ) : (
                       <button
-                        className="rounded-lg sm:py-4 py-2 sm:px-2 px-1 bg-dark-700"
+                        className={`rounded-lg sm:py-4 py-2 sm:px-2 px-1 bg-dark-700 ${
+                          openPayment ? "hidden" : ""
+                        }`}
                         onClick={() =>
                           dispatch({ type: "decreaseItem", sid: item.id })
                         }
@@ -133,7 +143,9 @@ const Cart = ({
                       {item.quantity}
                     </div>
                     <button
-                      className="rounded-lg sm:py-4 py-2 sm:px-2 px-1 bg-dark-700"
+                      className={`rounded-lg sm:py-4 py-2 sm:px-2 px-1 bg-dark-700 ${
+                        openPayment ? "hidden" : ""
+                      }`}
                       onClick={() => {
                         dispatch({ type: "increaseItem", sid: item.id });
                       }}
@@ -202,6 +214,7 @@ const Cart = ({
               name=""
               placeholder="Enter Coupon (Not required)"
               onChange={(e) => setCoupon(e.target.value)}
+              disabled={openPayment}
               id=""
             />
           </div>

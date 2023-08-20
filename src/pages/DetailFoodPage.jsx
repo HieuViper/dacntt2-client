@@ -58,10 +58,10 @@ const DetailFoodPage = () => {
   return (
     <div className="h-full w-full">
       {foodData && (
-        <div className="section-detail flex items-center gap-10">
+        <div className="section-detail sm:w-[80%] w-full sm:flex sm:flex-row flex-col items-center gap-10">
           <img
             src={foodData.avatar}
-            className="sm:w-[300px] w-[150px] rounded-xl shadow-md"
+            className="sm:w-[300px] w-[150px] rounded-xl shadow-md sm:mx-0 mx-auto mb-5 sm:mb-0"
             alt=""
           />
           <div className="flex flex-col gap-5">
@@ -82,12 +82,14 @@ const DetailFoodPage = () => {
                   <div className="line-through text-xs text-[#ccc]">
                     {foodData.price.toLocaleString()}₫
                   </div>
-                  <div className="text-primary-600 text-lg font-semibold">
+                  <div className="text-primary-500 text-xl font-semibold">
                     {foodData.discounted_price.toLocaleString()} ₫
                   </div>
                 </>
               ) : (
-                <div className="">{foodData.price.toLocaleString()}₫</div>
+                <div className="text-primary-500 text-xl font-semibold">
+                  {foodData.price.toLocaleString()}₫
+                </div>
               )}
             </div>
           </div>

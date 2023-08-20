@@ -143,29 +143,32 @@ const RecommendPage = () => {
 
   return (
     <div>
-      {ratings && (
-        <div>
-          <div className="text-xl font-semibold mb-2">
-            Here is your list ratings of our foods:
+      <div className="flex gap-10">
+        {ratings && (
+          <div className="p-5 bg-white text-dark-800 rounded-2xl shadow-md w-fit basis-1/2">
+            <div className="text-xl font-semibold mb-2">
+              Here is your list ratings of our foods:
+            </div>
+            <hr className="my-3" />
+            <div className="flex flex-col">
+              {ratings.map((item) => (
+                <div className="flex gap-3" key={item.id}>
+                  <span>{item.food.name}</span> -{" "}
+                  <span>{ratingToStars(item.rating)}</span>
+                </div>
+              ))}
+            </div>
           </div>
-          <ul className="pl-2">
-            {ratings.map((item) => (
-              <li key={item.id}>
-                {item.food.name} - {ratingToStars(item.rating)}
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+        )}
 
-      {tasteProfile && (
-        <div>
-          <div className="text-xl font-semibold my-3">Taste Profile:</div>
-          <p className="text-sm text-dark-gray dark:text-light-gray">
-            {tasteProfile}
-          </p>
-        </div>
-      )}
+        {tasteProfile && (
+          <div className="p-5 bg-white text-dark-800 rounded-2xl shadow-md w-fit basis-1/2">
+            <div className="text-xl font-semibold my-2">Taste Profile:</div>
+            <hr className="my-3" />
+            <p className="text-sm">{tasteProfile}</p>
+          </div>
+        )}
+      </div>
 
       {recommendations && recommendations.length > 0 && (
         <div className="my-3">

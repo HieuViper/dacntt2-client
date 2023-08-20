@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 /* eslint-disable react/prop-types */
 import React, { useContext, useEffect, useState } from "react";
 import CardItem from "../components/Card/CardItem";
@@ -39,9 +40,11 @@ const MenuPage = () => {
     console.log(value);
     console.log(selectedFoodGroup);
 
-    if (location.state.storeID) {
+    if (location.state?.storeID) {
       callNon(
-        `api/food?store_id=${location.state.storeID}&page=${value}&page_size=10`
+        `api/food?store_id=${
+          location.state.storeID
+        }&page=${value}&page_size=10&q=${location.state?.searchQuery || ""}`
       ).then((res) => {
         dispatchFood({ type: "setList", payload: { list: res.data } });
         dispatchFood({
@@ -52,7 +55,11 @@ const MenuPage = () => {
     } else {
       if (selectedFoodGroup) {
         callNon(
-          `api/stores/${selectedFoodGroup.store_id}/food_groups/${selectedFoodGroup.id}/food?page=${value}&page_size=10`
+          `api/stores/${selectedFoodGroup.store_id}/food_groups/${
+            selectedFoodGroup.id
+          }/food?page=${value}&page_size=10&q=${
+            location.state?.searchQuery || ""
+          }`
         ).then((res) => {
           dispatchFood({ type: "setList", payload: { list: res.data } });
           dispatchFood({
@@ -61,7 +68,11 @@ const MenuPage = () => {
           });
         });
       } else {
-        callNon(`api/food?page=${value}&page_size=10`).then((res) => {
+        callNon(
+          `api/food?page=${value}&page_size=10&q=${
+            location.state?.searchQuery || ""
+          }`
+        ).then((res) => {
           dispatchFood({ type: "setList", payload: { list: res.data } });
           dispatchFood({
             type: "getTotal",
@@ -75,7 +86,7 @@ const MenuPage = () => {
   useEffect(() => {
     if (location.state?.storeID) {
       const food_group = callNon(
-        `api/stores/${location.state.storeID}/food_groups`
+        `api/stores/${location.state.storeID}/food_groups?page_size=1000`
       );
 
       food_group.then((res) => {
@@ -83,7 +94,7 @@ const MenuPage = () => {
         setFoodGroupData(res.data);
       });
     } else {
-      const food_group = callNon(`api/food-groups`);
+      const food_group = callNon(`api/food-groups?page_size=1000`);
 
       food_group.then((res) => {
         console.log("🚀 ~ file: MenuPage.jsx:19 ~ useEffect ~ res:", res);
@@ -91,6 +102,18 @@ const MenuPage = () => {
       });
     }
   }, []);
+
+  useEffect(() => {
+    if (location.state?.searchQuery) {
+      callNon(`api/food?q=${location.state?.searchQuery}`).then((res) => {
+        dispatchFood({ type: "setList", payload: { list: res.data } });
+        dispatchFood({
+          type: "getTotal",
+          payload: { total: res.paging.last_page },
+        });
+      });
+    }
+  }, [location.state?.searchQuery]);
 
   return (
     <div className="pt-3 flex flex-col ">
@@ -103,6 +126,12 @@ const MenuPage = () => {
           />
         )}
       </div>
+
+      {location?.state?.searchQuery && (
+        <div className="font-semibold text-2xl pl-8 my-3">
+          Search for : <i>"{location?.state?.searchQuery}"</i>
+        </div>
+      )}
 
       <div
         className={` pt-6 grid  ${
@@ -119,7 +148,8 @@ const MenuPage = () => {
               data={item}
               dispatch={dispatchCart}
               state={stateCart}
-              isMenu={location.state}
+              isMenu={location.state?.storeID}
+              storeID={location.state?.storeID}
             />
           ))
         ) : (

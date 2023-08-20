@@ -10,11 +10,13 @@ import { toast } from "react-toastify";
 import { call } from "../../utils/api";
 import { CartContext } from "../../stores/CartContext";
 import { authContext } from "../../utils/auth";
+import Loader from "../Loader/Loader";
 
 // eslint-disable-next-line react/prop-types
 const Payment = ({ setOpenPayment, setCartOpen, cartData, dispatchCart }) => {
   console.log("🚀 ~ file: Payment.jsx:14 ~ Payment ~ cartData:", cartData);
   const userInfo = useContext(authContext);
+  const [loading, setLoading] = useState(false);
 
   const [choosen, setChoosen] = useState();
   const [paymentData, setPaymentData] = useState({
@@ -24,6 +26,7 @@ const Payment = ({ setOpenPayment, setCartOpen, cartData, dispatchCart }) => {
   });
 
   const handlePayment = () => {
+    setLoading(true);
     // setCartOpen(false);
     if (!paymentData.name) {
       toast.error("Please enter your name!");
@@ -77,6 +80,7 @@ const Payment = ({ setOpenPayment, setCartOpen, cartData, dispatchCart }) => {
         console.log(rs);
         if (rs.status == 200) {
           dispatchCart({ type: "clearCart" });
+          setLoading(false);
 
           toast.success("Order Successfully!!!", { autoClose: 1000 });
           setTimeout(() => {
@@ -88,6 +92,7 @@ const Payment = ({ setOpenPayment, setCartOpen, cartData, dispatchCart }) => {
             "🚀 ~ file: AddUserPage.jsx:68 ~ .then ~ entries:",
             entries
           );
+          setLoading(false);
           entries.map(([key, value]) => {
             console.log("loi ne", key, value);
 
@@ -102,7 +107,7 @@ const Payment = ({ setOpenPayment, setCartOpen, cartData, dispatchCart }) => {
   };
 
   return (
-    <div className="bg-dark-800 w-[600px] h-full text-white rounded-lg p-6 flex flex-col overflow-y-scroll">
+    <div className="bg-dark-800 w-full h-full text-white rounded-lg p-6 flex flex-col overflow-y-scroll">
       <div className="text-2xl py-2 font-semibold flex items-center justify-between">
         <span>Payment</span>
       </div>
@@ -184,7 +189,7 @@ const Payment = ({ setOpenPayment, setCartOpen, cartData, dispatchCart }) => {
             <div className="">
               <img src={shipcod} alt="" />
             </div>
-            <div className="">Ship COD</div>
+            <div className="">Ship&nbsp;COD</div>
             <div
               className={`${
                 choosen == 4 ? "block" : "hidden"
@@ -246,10 +251,12 @@ const Payment = ({ setOpenPayment, setCartOpen, cartData, dispatchCart }) => {
           Cancel
         </button>
         <button
-          className="text-white bg-primary-600 font-semibold rounded-xl w-full py-4 px-1"
+          className={`text-white bg-primary-600 font-semibold rounded-xl w-full py-4 px-1 ${
+            loading ? "opacity-75 select-none" : ""
+          }`}
           onClick={handlePayment}
         >
-          Confirm&nbsp;Payment
+          {loading ? <Loader /> : "Confirm Payment"}
         </button>
       </div>
     </div>

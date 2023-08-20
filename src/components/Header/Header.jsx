@@ -2,14 +2,38 @@ import React, { useContext, useEffect, useState } from "react";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import { CartContext } from "../../stores/CartContext";
 import { authContext } from "../../utils/auth";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { AsyncStorage } from "AsyncStorage";
+import { call } from "../../utils/api";
 
 // eslint-disable-next-line react/prop-types
 const Header = ({ setCartOpen }) => {
-  const { state, dispatch } = useContext(CartContext);
+  const navigate = useNavigate();
+  const { state: stateCart, dispatch } = useContext(CartContext);
   // const [userInfo, setUserInfo] = useState();
-  const userInfo = useContext(authContext);
-  // console.log("🚀 ~ file: Header.jsx:11 ~ Header ~ userInfo:", userInfo);
+  // const userInfo = useContext(authContext);
+  const [userInfo, setUserInfo] = useState();
+  const [search, setSearch] = useState("");
+  console.log("🚀 ~ file: Header.jsx:16 ~ Header ~ search:", search);
+
+  const handleSearch = (e) => {
+    console.log(search);
+    navigate("/menu", { state: { searchQuery: search }, replace: true });
+  };
+  const handleKeyDownSearch = (event) => {
+    if (event.key === "Enter") {
+      handleSearch();
+    }
+  };
+
+  console.log("🚀 ~ file: Header.jsx:11 ~ Header ~ userInfo:", userInfo);
+  useEffect(() => {
+    const getUserInfo = async () => {
+      const rs = await call(`api/user`);
+      setUserInfo(rs);
+    };
+    getUserInfo();
+  }, []);
 
   return (
     <div className="w-full flex items-center gap-5 px-2">
@@ -44,7 +68,10 @@ const Header = ({ setCartOpen }) => {
         Search
       </label>
       <div className="relative sm:block hidden">
-        <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+        <button
+          onClick={handleSearch}
+          className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
+        >
           <svg
             aria-hidden="true"
             className="w-5 h-5 text-white "
@@ -58,13 +85,14 @@ const Header = ({ setCartOpen }) => {
               clipRule="evenodd"
             ></path>
           </svg>
-        </div>
+        </button>
         <input
           type="text"
           id="simple-search"
           className="bg-[#393C49]   text-sm rounded-lg  block w-full pl-10 px-2.5 py-3  outline-none text-white"
           placeholder="Search"
-          required
+          onChange={(e) => setSearch(e.target.value)}
+          onKeyDown={handleKeyDownSearch}
         />
       </div>
 
@@ -72,9 +100,9 @@ const Header = ({ setCartOpen }) => {
         className="p-3.5 rounded-lg bg-primary-600 text-white text-[1.7rem] relative"
         onClick={() => setCartOpen(true)}
       >
-        {state && state.list.length > 0 && (
+        {stateCart && stateCart.list.length > 0 && (
           <div className="absolute -top-3 -left-3 w-6 h-6 rounded-full bg-red-500 text-xs flex justify-center items-center">
-            <span>{state.list.length}</span>
+            <span>{stateCart.list.length}</span>
           </div>
         )}
         <AiOutlineShoppingCart />

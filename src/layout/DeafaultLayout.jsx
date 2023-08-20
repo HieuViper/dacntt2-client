@@ -34,14 +34,15 @@ const DeafaultLayout = () => {
           anchor="right"
           PaperProps={{
             style: {
-              maxWidth: "70%",
+              maxWidth: "85%",
+
               backgroundColor: "#1F1D2B",
             },
           }}
         >
           <CartProvider>
-            <div className="flex h-full">
-              <div className={`${openPayment ? "sm:block hidden" : ""}`}>
+            <div className="flex h-full min-w-[500px]">
+              <div className={`${openPayment ? "sm:block hidden" : ""} w-full`}>
                 <Cart
                   setCartOpen={setCartOpen}
                   state={state}
@@ -50,7 +51,6 @@ const DeafaultLayout = () => {
                   openPayment={openPayment}
                 />
               </div>
-              <div className="h-full w-[1px] bg-[#393C49]"></div>
               {openPayment && (
                 <Payment
                   setOpenPayment={setOpenPayment}

@@ -36,13 +36,14 @@ const LoginPage = () => {
         email: values.email,
         password: values.password,
         type: "customer",
-      }).then((res) => {
+      }).then(async (res) => {
         console.log(res);
         if (res) setLoading(false);
         if (res.status == 200) {
-          AsyncStorage.setItem("token-customer", JSON.stringify(res));
+          await AsyncStorage.setItem("token-customer", JSON.stringify(res));
           toast.success(res.message, { autoClose: 2000 });
-          window.location.href = "/menu";
+          navigate("/menu");
+          // window.location.href = "/menu";
         } else {
           toast.error(res.data.message);
         }

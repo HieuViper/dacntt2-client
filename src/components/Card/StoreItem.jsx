@@ -4,7 +4,7 @@ import "./store-item.css";
 
 const StoreItem = ({ direction, data, setStoreIDSelectied }) => {
   return (
-    <div className="h-[400px] relative flex shadow">
+    <div className="h-[500px] relative flex shadow">
       {/* <div className="box h-[400px] w-full flex">
         <div className="relative w-full">
           <img
@@ -52,14 +52,14 @@ const StoreItem = ({ direction, data, setStoreIDSelectied }) => {
         </div>
       </div> */}
 
-      <div className="box h-[400px] w-full flex">
+      <div className="box h-full w-full flex">
         <div className="relative w-full">
           <div
             className={`${
               direction != "left"
                 ? "pl-10 pr-[70%] items-start"
                 : "pr-10 pl-[70%] items-start"
-            } left bg-[#b25b5b] text-white text-sm flex flex-col gap-5 h-full justify-center  w-full rounded-lg`}
+            } left bg-[#b25b5b] text-white text-sm flex flex-col gap-5 h-full justify-center w-full rounded-lg`}
           >
             <span className="text-3xl font-semibold">{data.name}</span>
             <span>{data.address}</span>
