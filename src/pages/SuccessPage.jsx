@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useEffect } from "react";
 import { useLocation, useParams, useSearchParams } from "react-router-dom";
 import { call } from "../utils/api";
+import Loader from "../components/Loader/Loader";
+import { CircularProgress } from "@mui/material";
 
 const SuccessPage = () => {
   const location = useLocation();
@@ -68,7 +70,7 @@ const SuccessPage = () => {
         </>
       )}
 
-      {order && (
+      {order ? (
         <div className="sm:w-[70%] w-full mt-7 mx-auto text-lg border p-10 rounded-xl border-gray-500 shadow-lg">
           <div className="grid sm:grid-cols-3 grid-cols-1 sm:gap-0 gap-2 mb-5">
             <div className="">
@@ -130,13 +132,17 @@ const SuccessPage = () => {
             <div className="text-xl mb-5 font-semibold">Order Total</div>
             <div className="flex justify-between">
               <span>Discount</span>
-              <span>{order.voucher.discount}%</span>
+              <span>{order.voucher?.discount || 0}%</span>
             </div>
             <div className="flex justify-between font-semibold text-lg">
               <span>Total</span>
               <span>{parseFloat(order.total).toLocaleString()} ₫</span>
             </div>
           </div>
+        </div>
+      ) : (
+        <div className="h-[500px] w-full flex justify-center items-center">
+          <CircularProgress sx={{ color: "#EA736D" }} />
         </div>
       )}
 

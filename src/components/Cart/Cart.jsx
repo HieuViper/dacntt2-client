@@ -42,6 +42,7 @@ const Cart = ({
           toast.error(`${rs.data.message}`);
         }
       } else {
+        dispatch({ type: "addVoucherID", item: null });
         setOpenPayment(true);
       }
     }
