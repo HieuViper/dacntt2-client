@@ -173,6 +173,7 @@ const Cart = ({
                   <motion.button
                     whileTap={{ scale: 1.2 }}
                     className="p-3  text-center rounded-lg border-[1px] border-primary-600 hover:bg-primary-600 group transition-all duration-200"
+                    disabled={openPayment}
                     onClick={() =>
                       dispatch({ type: "removeItem", sid: item.id })
                     }

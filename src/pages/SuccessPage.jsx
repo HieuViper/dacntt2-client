@@ -22,24 +22,51 @@ const SuccessPage = () => {
 
   return (
     <div className="bg-gray-100 h-full p-6  md:mx-auto">
-      <svg
-        viewBox="0 0 24 24"
-        className="text-primary-600 w-16 h-16 mx-auto my-6"
-      >
-        <path
-          fill="currentColor"
-          d="M12,0A12,12,0,1,0,24,12,12.014,12.014,0,0,0,12,0Zm6.927,8.2-6.845,9.289a1.011,1.011,0,0,1-1.43.188L5.764,13.769a1,1,0,1,1,1.25-1.562l4.076,3.261,6.227-8.451A1,1,0,1,1,18.927,8.2Z"
-        ></path>
-      </svg>
-      <div className="text-center">
-        <h3 className="md:text-2xl text-base text-gray-900 font-semibold text-center">
-          Payment Done!
-        </h3>
-        <p className="text-gray-600 my-2">
-          Thank you for completing your secure online payment.
-        </p>
-        <p> Have a great day! </p>
-      </div>
+      {status_id != 2 ? (
+        <>
+          <svg
+            viewBox="0 0 24 24"
+            className="text-primary-600 w-20 h-20 mx-auto my-6"
+          >
+            <g>
+              <path
+                fill="currentColor"
+                d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-11.414L9.172 7.757 7.757 9.172 10.586 12l-2.829 2.828 1.415 1.415L12 13.414l2.828 2.829 1.415-1.415L13.414 12l2.829-2.828-1.415-1.415L12 10.586z"
+              />
+            </g>
+          </svg>
+          <div className="text-center">
+            <h3 className="md:text-2xl text-base text-gray-900 font-semibold text-center">
+              Payment Failed!
+            </h3>
+            <p className="text-gray-600 my-2">
+              Somthing went wrong. Please try again!
+            </p>
+            <p> Have a great day! </p>
+          </div>
+        </>
+      ) : (
+        <>
+          <svg
+            viewBox="0 0 24 24"
+            className="text-primary-600 w-16 h-16 mx-auto my-6"
+          >
+            <path
+              fill="currentColor"
+              d="M12,0A12,12,0,1,0,24,12,12.014,12.014,0,0,0,12,0Zm6.927,8.2-6.845,9.289a1.011,1.011,0,0,1-1.43.188L5.764,13.769a1,1,0,1,1,1.25-1.562l4.076,3.261,6.227-8.451A1,1,0,1,1,18.927,8.2Z"
+            ></path>
+          </svg>
+          <div className="text-center">
+            <h3 className="md:text-2xl text-base text-gray-900 font-semibold text-center">
+              Payment Done!
+            </h3>
+            <p className="text-gray-600 my-2">
+              Thank you for completing your secure online payment.
+            </p>
+            <p> Have a great day! </p>
+          </div>
+        </>
+      )}
 
       {order && (
         <div className="sm:w-[70%] w-full mt-7 mx-auto text-lg border p-10 rounded-xl border-gray-500 shadow-lg">
