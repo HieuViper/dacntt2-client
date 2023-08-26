@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import paypal from "../../assets/paypal.svg";
 import vnpay from "../../assets/vnpay.svg";
@@ -15,7 +15,9 @@ import Loader from "../Loader/Loader";
 // eslint-disable-next-line react/prop-types
 const Payment = ({ setOpenPayment, setCartOpen, cartData, dispatchCart }) => {
   console.log("🚀 ~ file: Payment.jsx:14 ~ Payment ~ cartData:", cartData);
-  const userInfo = useContext(authContext);
+  // const userInfo = useContext(authContext);
+  const [userInfo, setUserInfo] = useState();
+  console.log("🚀 ~ file: Payment.jsx:19 ~ Payment ~ userInfo:", userInfo);
   const [loading, setLoading] = useState(false);
 
   const [choosen, setChoosen] = useState();
@@ -105,6 +107,13 @@ const Payment = ({ setOpenPayment, setCartOpen, cartData, dispatchCart }) => {
       });
     }
   };
+  useEffect(() => {
+    const getUserInfo = async () => {
+      const rs = await call(`api/user`);
+      setUserInfo(rs);
+    };
+    getUserInfo();
+  }, []);
 
   return (
     <div className="bg-dark-800 w-full h-full text-white rounded-lg p-6 flex flex-col overflow-y-scroll">

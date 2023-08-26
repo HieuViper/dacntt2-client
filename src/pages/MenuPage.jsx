@@ -134,7 +134,7 @@ const MenuPage = () => {
       )}
 
       <div
-        className={` pt-6 grid  ${
+        className={` pt-6 grid gap-5 ${
           toogleSidebar
             ? "lg:grid-cols-5 sm:grid-cols-3 grid-cols-1 place-items-center"
             : "lg:grid-cols-4 sm:grid-cols-3 grid-cols-1 place-items-center"
