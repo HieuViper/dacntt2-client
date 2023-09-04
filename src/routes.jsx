@@ -14,6 +14,7 @@ import ProfilePage from "./pages/ProfilePage";
 import AboutPage from "./pages/AboutPage";
 import RecommendPage from "./pages/RecommendPage";
 import SuccessPage from "./pages/SuccessPage";
+import ErrorPage from "./pages/ErrorPage";
 
 const Router = () => {
   const routes = useRoutes([
@@ -66,6 +67,14 @@ const Router = () => {
     {
       path: "/register",
       element: <RegisterPage />,
+    },
+    {
+      path: "/404",
+      element: <ErrorPage />,
+    },
+    {
+      path: "*",
+      element: <Navigate to="/404" />,
     },
   ]);
   return routes;

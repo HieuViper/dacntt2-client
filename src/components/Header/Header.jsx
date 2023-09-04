@@ -38,7 +38,7 @@ const Header = ({ setCartOpen }) => {
   return (
     <div className="w-full flex items-center gap-5 px-2">
       <div className="flex-1 lg:text-2xl sm:text-lg text-base font-semibold text-white text-start">
-        Food Order Website
+        To Your Door
         <div className="text-sm font-light sm:block hidden">
           {new Date().toLocaleString("en-us", {
             month: "short",
@@ -50,8 +50,10 @@ const Header = ({ setCartOpen }) => {
       </div>
 
       {userInfo ? (
-        <span>
-          Welcome, <b> {userInfo.name}</b>
+        <span className="hover:underline">
+          <Link to="/profile">
+            Welcome, <b> {userInfo.name}</b>
+          </Link>
         </span>
       ) : (
         <>

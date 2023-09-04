@@ -22,7 +22,7 @@ const AboutPage = () => {
   return (
     <div className="">
       <div className="section-1 bg-dark-800 text-white py-5 px-32 flex items-center justify-between w-full">
-        <button className="font-Knewave text-2xl">Food Order Website</button>
+        <button className="font-Knewave text-2xl">To Your Door</button>
         <div className="flex gap-10 font-semibold">
           <a href="/" className=" hover:text-primary-600 duration-200">
             Home
@@ -44,13 +44,13 @@ const AboutPage = () => {
           ***Contact Information***
         </div>
         <div className="px-32 tracking-wide leading-7 ">
-          &emsp;Welcome to <b>"Food Order Website"</b> - your ultimate
-          destination for the finest online food shopping experience! We take
-          pride in being your top choice for those who are passionate about
-          cuisine and crave the joy of savoring delectable dishes right in the
-          comfort of their own homes. <br />
+          &emsp;Welcome to <b>"To Your Door"</b> - your ultimate destination for
+          the finest online food shopping experience! We take pride in being
+          your top choice for those who are passionate about cuisine and crave
+          the joy of savoring delectable dishes right in the comfort of their
+          own homes. <br />
           <br />
-          &emsp;At <b>"Food Order Website"</b>, we understand that the quest for
+          &emsp;At <b>"To Your Door"</b>, we understand that the quest for
           exquisite food is an integral part of daily life. With a wide array of
           menu options, ranging from beloved traditional classics to innovative
           and novel creations, we are committed to delivering memorable culinary
@@ -60,8 +60,8 @@ const AboutPage = () => {
           quality and your satisfaction above all else, ensuring that every
           product is prepared and delivered to your doorstep with love and care.
           Join us in exploring a world of diverse and sumptuous cuisine. Let
-          <b>"Food Order Website"</b> become your reliable companion in
-          satisfying your palate.
+          <b>"To Your Door"</b> become your reliable companion in satisfying
+          your palate.
           <br />
           <br />
           <div className="text-start w-full">

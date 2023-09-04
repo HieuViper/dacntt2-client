@@ -10,6 +10,7 @@ import { useLocation, useOutletContext } from "react-router-dom";
 import { authContext } from "../utils/auth";
 import styled from "@emotion/styled";
 import { Pagination } from "@mui/material";
+import Loader from "../components/Loader/Loader";
 
 const CustomPagination = styled(Pagination)({
   "& .Mui-selected": {
@@ -24,11 +25,16 @@ const CustomPagination = styled(Pagination)({
 const MenuPage = () => {
   const [toogleSidebar] = useOutletContext();
   const location = useLocation();
+  console.log("🚀 ~ file: MenuPage.jsx:27 ~ MenuPage ~ location:", location);
   const [selectedFoodGroup, setSelectedFoodGroup] = useState();
   console.log("🚀 ~ file: MenuPage.jsx:13 ~ MenuPage ~ location:", location);
   const { state: stateCart, dispatch: dispatchCart } = useContext(CartContext);
   console.log("🚀 ~ file: MenuPage.jsx:9 ~ MenuPage ~ stateCart:", stateCart);
-  const { state: stateFood, dispatch: dispatchFood } = useContext(FoodContext);
+  const {
+    state: stateFood,
+    dispatch: dispatchFood,
+    isLoading: loadingFood,
+  } = useContext(FoodContext);
   console.log("🚀 ~ file: MenuPage.jsx:11 ~ MenuPage ~ stateFood:", stateFood);
 
   // const userInfo = useContext(authContext);
@@ -115,7 +121,11 @@ const MenuPage = () => {
     }
   }, [location.state?.searchQuery]);
 
-  return (
+  return loadingFood ? (
+    <div className="w-ful h-full flex justify-center items-center">
+      <Loader />
+    </div>
+  ) : (
     <div className="pt-3 flex flex-col ">
       <div className="tab">
         {foodGroupData && (

@@ -21,7 +21,7 @@ const Footer = ({ store }) => {
             onClick={() => navigate("/")}
             className="font-Knewave text-4xl"
           >
-            Food Order Website
+            To Your Door
           </button>
         </div>
         <div className="flex flex-col gap-5 md:col-span-2 lg:col-auto col-auto">

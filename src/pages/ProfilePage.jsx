@@ -4,7 +4,7 @@ import React from "react";
 import { useState } from "react";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { call } from "../utils/api";
+import { call, callUpload } from "../utils/api";
 import moment from "moment/moment";
 import { toast } from "react-toastify";
 import hidePass from "../assets/hidePass.svg";
@@ -27,6 +27,7 @@ import {
 } from "@mui/material";
 import Loader from "../components/Loader/Loader";
 import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
+import { AiFillCamera } from "react-icons/ai";
 import styled from "@emotion/styled";
 
 const ProfilePage = () => {
@@ -48,6 +49,14 @@ const ProfilePage = () => {
   const [loadingCallAPIChangePass, setLoadingCallAPIChangePass] =
     useState(false);
 
+  //avatar
+  const [previewPic, setPreviewPic] = useState();
+  const [uploadPic, setUploadPic] = useState();
+  const changeUploadPicHandler = (e) => {
+    setPreviewPic(URL.createObjectURL(e.target.files[0]));
+    setUploadPic(e.target.files[0]);
+  };
+
   // order tabble
   const [orders, setOrders] = useState();
   const [orderItem, setOrderItem] = useState([]);
@@ -63,7 +72,21 @@ const ProfilePage = () => {
 
   const handleUpdate = async () => {
     setLoadingCallAPIUpdate(true);
-    const rs = await call(`api/customers/${userData.id}`, "PUT", userData);
+
+    const formData = new FormData();
+    formData.append("id", userData.id);
+    formData.append("name", userData.name);
+    formData.append("email", userData.email);
+    formData.append("phone", userData.phone);
+    formData.append("address", userData.address);
+    formData.append("avatar", uploadPic || userData.avatar);
+    formData.append("_method", "PUT");
+
+    const rs = await callUpload(
+      `api/customers/${userData.id}`,
+      "POST",
+      formData
+    );
     if (rs.status == 200) {
       toast.success("Update Successfully!!!", { autoClose: 2000 });
     } else if (rs.status == 400) {
@@ -71,7 +94,10 @@ const ProfilePage = () => {
     } else {
       console.log(rs);
       let entries = Object.entries(rs.data.errors);
-      console.log("🚀 ~ file: AddUserPage.jsx:68 ~ .then ~ entries:", entries);
+      console.log(
+        "🚀 ~ file: ProfilePage.jsx:91 ~ handleUpdate ~ entries:",
+        entries
+      );
       entries.map(([key, value]) => {
         console.log("loi ne", key, value);
 
@@ -81,6 +107,8 @@ const ProfilePage = () => {
       });
     }
     setLoadingCallAPIUpdate(false);
+
+    setUploadPic(null);
   };
 
   const handleChangePass = async () => {
@@ -130,6 +158,7 @@ const ProfilePage = () => {
         const rs = await call(`api/user`);
         call(`api/orders?customer_id=${rs.id}`).then(async (rs) => {
           setOrders(rs.data);
+          console.log("🚀 ~ file: ProfilePage.jsx:133 ~ call ~ rs:", rs);
           await rs.data.map((rs1) => {
             console.log(rs1);
             call(`api/orders/${rs1.id}`).then((rs2) => {
@@ -328,11 +357,28 @@ const ProfilePage = () => {
       <div className="flex gap-7">
         <div className="basis-8/12  bg-dark-800 text-white p-6 rounded-xl shadow-lg">
           <div className="flex gap-7 items-center">
-            <img
-              src={userData.avatar}
-              className="shadow-md rounded-full h-20 w-20"
-              alt=""
-            />
+            <div className="relative">
+              <img
+                src={previewPic || userData.avatar}
+                className="shadow-md rounded-full h-20 w-20"
+                alt=""
+              />
+              <button className="absolute rounded-full h-20 w-20 bottom-0 left-0 right-0 top-0 overflow-hidden bg-gray-600 bg-fixed opacity-0 transition duration-300 ease-in-out hover:opacity-50">
+                <label
+                  htmlFor="dropzone-file"
+                  className="w-full h-full flex justify-center items-center cursor-pointer"
+                >
+                  <AiFillCamera size="2rem" />
+                </label>
+              </button>
+              <input
+                id="dropzone-file"
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={changeUploadPicHandler}
+              />
+            </div>
             <div className="flex flex-col gap-3">
               <div className="font-semibold">{name}</div>
               <div className="">

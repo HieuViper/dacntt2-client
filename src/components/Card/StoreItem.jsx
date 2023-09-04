@@ -4,7 +4,7 @@ import "./store-item.css";
 
 const StoreItem = ({ direction, data, setStoreIDSelectied }) => {
   return (
-    <div className="h-[500px] relative flex shadow">
+    <div className="lg:h-[400px] h-[350px] relative flex shadow">
       {/* <div className="box h-[400px] w-full flex">
         <div className="relative w-full">
           <img

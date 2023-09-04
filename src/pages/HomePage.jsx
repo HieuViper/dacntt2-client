@@ -35,7 +35,7 @@ const HomePage = () => {
       <div className="section-1 relative bg-no-repeat bg-cover w-full h-[600px] bg-bottom bg-[url('https://images.unsplash.com/photo-1499028344343-cd173ffc68a9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80')]">
         <div className="absolute top-0 z-10 text-white py-5 md:px-32 px-5 flex items-center justify-between w-full">
           <button className="font-Knewave md:text-2xl text-sm">
-            Food Order Website
+            To Your Door
           </button>
           <div className="flex md:gap-10 gap-5 font-semibold">
             <a href="/" className=" hover:text-primary-600 duration-200">
@@ -129,20 +129,24 @@ const HomePage = () => {
         <div className="grid md:grid-cols-3 grid-cols-2 gap-10">
           {featureStore &&
             featureStore.map((item) => (
-              <button
-                key={item.id}
-                className="h-[300px] relative rounded-lg shadow-xl"
-                onClick={() => handleNavigateStore(item)}
-              >
-                <img
-                  src={item.avatar}
-                  className="w-full h-full object-cover opacity-90 rounded-lg shadow-xl"
-                  alt=""
-                />
-                {/* <span className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-primary-600 text-center">
+              <div className="" key={item.id}>
+                <div className="font-semibold text-lg text-center mb-2">
+                  {item.name}
+                </div>
+                <button
+                  className="h-[300px] relative rounded-lg shadow-xl"
+                  onClick={() => handleNavigateStore(item)}
+                >
+                  <img
+                    src={item.avatar}
+                    className="w-full h-full object-cover opacity-90 rounded-lg shadow-xl"
+                    alt=""
+                  />
+                  {/* <span className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-primary-600 text-center">
                   {item.name}
                 </span> */}
-              </button>
+                </button>
+              </div>
             ))}
         </div>
       </div>
