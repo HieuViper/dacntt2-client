@@ -27,10 +27,7 @@ const SideBarData = ({ toggle }) => {
   const location = useLocation();
   const userInfo = useContext(authContext);
   const navigate = useNavigate();
-  const handleLogout = () => {
-    AsyncStorage.setItem("token-customer", "");
-    navigate("/login");
-  };
+
   return (
     <div className="">
       {datas.map((data) => {

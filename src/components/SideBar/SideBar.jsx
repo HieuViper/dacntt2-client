@@ -3,11 +3,19 @@ import { BiChevronLeft } from "react-icons/bi";
 import { FiLogOut } from "react-icons/fi";
 import SideBarData, { CustomTooltip } from "./SideBarData";
 import { authContext } from "../../utils/auth";
+import { AsyncStorage } from "AsyncStorage";
+import { useNavigate } from "react-router-dom";
 
 // eslint-disable-next-line react/prop-types
 const SideBar = ({ setToogleSidebar }) => {
   const [toggle, setToggle] = useState(true);
   const userInfo = useContext(authContext);
+  const navigate = useNavigate()
+
+  const handleLogout = () => {
+    AsyncStorage.setItem("token-customer", "");
+    navigate("/login");
+  };
   return (
     <div
       className={`${toggle ? "sm:w-fit w-0" : "w-[18rem]"} sidebar-container`}
@@ -17,7 +25,7 @@ const SideBar = ({ setToogleSidebar }) => {
       <div className="mt-10 mb-2">
         {userInfo && (
           <CustomTooltip title={toggle ? "Logout" : ""} arrow placement="right">
-            <div className={`${toggle ? "w-[3.6rem]" : "w-[16rem]"} sidebar`}>
+            <div className={`${toggle ? "w-[3.6rem]" : "w-[16rem]"} sidebar`} onClick={handleLogout}>
               <div className="mr-8 text-[1.7rem] text-[rgb(30, 30, 17)]">
                 <FiLogOut />
               </div>
