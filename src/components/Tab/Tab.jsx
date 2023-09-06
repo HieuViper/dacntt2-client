@@ -29,7 +29,7 @@ const TabComponent = ({ data, dispatch, setSelectedFoodGroup }) => {
             <Tab
               key={item.id}
               value={item.id}
-              style={{ fontFamily: "Poppins" }}
+              style={{ fontFamily: "Inter" }}
               label={item.name}
               onClick={() => {
                 console.log("okok");

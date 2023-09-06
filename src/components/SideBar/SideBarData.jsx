@@ -19,7 +19,7 @@ export const CustomTooltip = styled(({ className, ...props }) => (
   [`& .${tooltipClasses.tooltip}`]: {
     backgroundColor: "#EA736D",
     color: "fff",
-    fontFamily: "Poppins",
+    fontFamily: "Inter",
   },
 }));
 // eslint-disable-next-line react/prop-types
