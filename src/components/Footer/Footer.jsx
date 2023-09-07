@@ -15,7 +15,7 @@ const Footer = ({ store }) => {
 
   return (
     <div className="">
-      <div className="grid md:grid-cols-5 grid-cols-2  bg-zinc-800 gap-16 md:px-16 px-6 md:py-20 py-10 text-white">
+      <div className="grid md:grid-cols-6 grid-cols-2  bg-zinc-800 gap-16 md:px-16 px-6 md:py-20 py-10 text-white">
         <div className="lg:col-span-2 md:col-auto col-span-2 flex items-center justify-center">
           <button
             onClick={() => navigate("/")}
@@ -24,13 +24,21 @@ const Footer = ({ store }) => {
             To Your Door
           </button>
         </div>
-        <div className="flex flex-col gap-5 md:col-span-2 lg:col-auto col-auto">
+        <div className="flex flex-col lg:col-span-2 gap-5 md:col-span-2 col-auto">
           <div className="font-semibold text-xl">Visit</div>
-          <div className="leading-7">
+          <div className="leading-8">
             Welcome to our online food delivery platform! Explore a diverse menu
             of delightful dishes and experience the convenience of ordering food
             online. Indulge in amazing flavors right at the comfort of your home
-            with us.
+            with us. <br />
+            Start ordering delicious meals on our website now! Satisfy your
+            cravings with a few clicks, and let us handle the rest. Your
+            satisfaction is our top priority.
+            <br />
+            Thank you for choosing us for your online food ordering needs.{" "}
+            <b>
+              <i> Bon appétit!</i>
+            </b>
           </div>
         </div>
         <div className="flex flex-col gap-5">
@@ -64,7 +72,7 @@ const Footer = ({ store }) => {
             placeholder="Enter your email to get discount!!!"
             id=""
           />
-          <button className="px-4 py-3 bg-primary-600 hover:bg-primary-500 justify-center rounded-lg shadow-lg duration-200 text-white text-lg uppercase flex items-center gap-2">
+          <button className="px-2 font-semibold py-3 bg-primary-600 hover:bg-primary-500 justify-center rounded-lg shadow-lg duration-200 text-white uppercase flex items-center gap-2">
             Subcribe Now
             <svg
               xmlns="http://www.w3.org/2000/svg"

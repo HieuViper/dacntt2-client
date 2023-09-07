@@ -87,14 +87,18 @@ const AboutPage = () => {
         <div className="owner px-32 flex mb-8 gap-32 items-center justify-center">
           <CardProfile
             name="Phan Minh Hieu"
-            ava="https://scontent.fsgn5-14.fna.fbcdn.net/v/t39.30808-6/310983517_3406944102872573_6530031874330341732_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=5b7eaf&_nc_ohc=EkqX25haYw8AX-YdEhg&_nc_oc=AQmfec2YdlJClFSaHi7BZz6v_W3GLrUFiJx8_awgAWLXGg_4wrOz-qTroVEDNIrInWY&_nc_ht=scontent.fsgn5-14.fna&oh=00_AfCB0p1KHVgrZrSFhD1iwe0U9FcOAb8G3YighDfYgRFtNA&oe=64DAE564"
+            ava="https://res.cloudinary.com/ddusqwv7k/image/upload/v1694074099/users/ava-profile_1694074093.jpg"
             position="Front-end Developer"
             github="https://github.com/HieuViper"
             website="https://hieudev-portfolio.vercel.app/"
             facebook="https://www.facebook.com/viper.2409/"
             email="mailto:mr.hieu2491@gmail.com"
           />
-          <CardProfile name="Nguyen Minh Tri" position="Back-end Developer" />
+          <CardProfile
+            name="Nguyen Minh Tri"
+            position="Back-end Developer"
+            ava="https://res.cloudinary.com/ddusqwv7k/image/upload/v1688648527/users/default-avatar_1688648526.png"
+          />
         </div>
       </div>
 

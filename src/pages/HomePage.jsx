@@ -83,7 +83,7 @@ const HomePage = () => {
               >
                 <img
                   src={item.avatar}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover rounded-xl shadow-lg"
                   alt=""
                 />
                 <button
@@ -95,7 +95,7 @@ const HomePage = () => {
                       },
                     })
                   }
-                  className="ml-7 mb-4 text-primary-600 flex items-center gap-2 absolute bottom-3 cursor-pointer hover:gap-4 duration-200"
+                  className="ml-7 mb-4 text-primary-600 font-bold flex items-center gap-2 absolute bottom-3 cursor-pointer hover:gap-4 duration-200"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
